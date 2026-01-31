@@ -23,4 +23,11 @@ public interface CurrencyMappingRepository extends JpaRepository<CurrencyMapping
      * @return 幣別對應資料清單，若無資料則回傳空的 List（不為 null）
      */
     List<CurrencyMapping> findAll();
+
+    /**
+     * 判斷幣別代碼是否存在
+     * @param currencyCode
+     * @return 是否存在
+     */
+    boolean existsByCurrencyCode(String currencyCode);
 }

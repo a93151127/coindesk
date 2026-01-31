@@ -35,4 +35,12 @@ public class GlobalExceptionHandler {
                 RetCode.E5000.getRetMsg()
         );
     }
+
+    @ExceptionHandler(DataAlreadyExistException.class)
+    public ApiResponse<Void> handleDataAlreadyExist(DataAlreadyExistException ex){
+        return new ApiResponse<>(
+                RetCode.D0002.getRetCode(),
+                RetCode.D0002.getRetMsg()
+        );
+    }
 }
