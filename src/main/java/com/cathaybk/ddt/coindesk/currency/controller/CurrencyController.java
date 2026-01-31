@@ -2,14 +2,8 @@ package com.cathaybk.ddt.coindesk.currency.controller;
 
 import com.cathaybk.ddt.coindesk.base.constant.RetCode;
 import com.cathaybk.ddt.coindesk.base.model.ApiResponse;
-import com.cathaybk.ddt.coindesk.currency.dto.DeleteCurrencyReq;
-import com.cathaybk.ddt.coindesk.currency.dto.InsertCurrencyReq;
-import com.cathaybk.ddt.coindesk.currency.dto.QueryCurrencyRes;
-import com.cathaybk.ddt.coindesk.currency.dto.UpdateCurrencyReq;
-import com.cathaybk.ddt.coindesk.currency.service.DeleteCurrencyService;
-import com.cathaybk.ddt.coindesk.currency.service.InsertCurrencyService;
-import com.cathaybk.ddt.coindesk.currency.service.QueryCurrencyService;
-import com.cathaybk.ddt.coindesk.currency.service.UpdateCurrencyService;
+import com.cathaybk.ddt.coindesk.currency.dto.*;
+import com.cathaybk.ddt.coindesk.currency.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +24,9 @@ public class CurrencyController {
 
     @Autowired
     private DeleteCurrencyService deleteCurrencyService;
+
+    @Autowired
+    private CallCoindeskService callCoindeskService;
 
 
     @GetMapping("/queryCurrency")
@@ -73,6 +70,16 @@ public class CurrencyController {
         return new ApiResponse<>(
                 RetCode.S0000.getRetCode(),
                 RetCode.S0000.getRetMsg()
+        );
+    }
+
+    @GetMapping("/api/coindesk")
+    public ApiResponse<CallCoindeskRes> queryCoinDesk() {
+        CallCoindeskRes res = callCoindeskService.callCoindesk();
+        return new ApiResponse<>(
+                RetCode.S0000.getRetCode(),
+                RetCode.S0000.getRetMsg(),
+                res
         );
     }
 }
