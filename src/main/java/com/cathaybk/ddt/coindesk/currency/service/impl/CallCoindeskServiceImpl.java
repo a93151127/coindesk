@@ -1,6 +1,7 @@
 package com.cathaybk.ddt.coindesk.currency.service.impl;
 
 import com.cathaybk.ddt.coindesk.base.util.HttpUtil;
+import com.cathaybk.ddt.coindesk.base.util.JsonParseUtil;
 import com.cathaybk.ddt.coindesk.currency.dto.CallCoindeskRes;
 import com.cathaybk.ddt.coindesk.currency.dto.CoinDeskRes;
 import com.cathaybk.ddt.coindesk.currency.service.CallCoindeskService;
@@ -28,7 +29,7 @@ public class CallCoindeskServiceImpl implements CallCoindeskService {
     private HttpUtil httpUtil;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonParseUtil jsonParseUtil;
 
     @Override
     public CallCoindeskRes callCoindesk() {
@@ -38,27 +39,9 @@ public class CallCoindeskServiceImpl implements CallCoindeskService {
         headers.setAccept(java.util.Collections.singletonList(MediaType.APPLICATION_JSON));
 
         String apiResult = httpUtil.get(coindeskUrl, headers);
-        CoinDeskRes coinDeskRes = parse(apiResult);
+        CoinDeskRes coinDeskRes = jsonParseUtil.parse(apiResult, CoinDeskRes.class);
 
         return convertToCallRes(coinDeskRes);
-    }
-
-    /**
-     * 將 CoinDesk API 回傳的 JSON 字串解析為 CoinDeskRes 物件。
-     *
-     * @param json CoinDesk API 回傳的原始 JSON 字串
-     * @return 解析後的 CoinDeskRes 物件
-     * @throws com.cathaybk.ddt.coindesk.base.exception.ExternalServiceException
-     *         當 JSON 解析失敗或回傳格式異常時拋出
-     */
-    private CoinDeskRes parse(String json) {
-        try {
-            return objectMapper.readValue(json, CoinDeskRes.class);
-        } catch (Exception e) {
-            throw new com.cathaybk.ddt.coindesk.base.exception.ExternalServiceException(
-                    "Failed to parse response from CoinDesk API", e
-            );
-        }
     }
 
     /**
