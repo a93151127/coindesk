@@ -28,6 +28,9 @@ public class CurrencyController {
     @Autowired
     private CallCoindeskService callCoindeskService;
 
+    @Autowired
+    private QueryExchangeRateService queryExchangeRateService;
+
 
     @GetMapping("/queryCurrency")
     public ApiResponse<QueryCurrencyRes> queryCurrency(
@@ -77,6 +80,19 @@ public class CurrencyController {
     public ApiResponse<CallCoindeskRes> queryCoinDesk() {
         CallCoindeskRes res = callCoindeskService.callCoindesk();
         return new ApiResponse<>(
+                RetCode.S0000.getRetCode(),
+                RetCode.S0000.getRetMsg(),
+                res
+        );
+    }
+
+    @GetMapping("/api/queryRate")
+    public ApiResponse<QueryExchangeRateRes> queryExchangeRate(){
+        QueryExchangeRateRes res = new QueryExchangeRateRes();
+        List<QueryExchangeRateRes.RateItem> items = queryExchangeRateService
+                .queryExchangeRates();
+        res.setItems(items);
+        return new ApiResponse<QueryExchangeRateRes>(
                 RetCode.S0000.getRetCode(),
                 RetCode.S0000.getRetMsg(),
                 res
