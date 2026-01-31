@@ -43,4 +43,21 @@ public class GlobalExceptionHandler {
                 RetCode.D0002.getRetMsg()
         );
     }
+
+    @ExceptionHandler(ExternalServiceException.class)
+    public ApiResponse<Void> handleExternalService(ExternalServiceException ex){
+        logger.error("External service error! ", ex);
+        return new ApiResponse<>(
+                RetCode.E5001.getRetCode(),
+                RetCode.E5001.getRetMsg()
+        );
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ApiResponse<Void> handleException(Exception ex){
+        return new ApiResponse<>(
+                RetCode.E9999.getRetCode(),
+                RetCode.E9999.getRetMsg()
+        );
+    }
 }

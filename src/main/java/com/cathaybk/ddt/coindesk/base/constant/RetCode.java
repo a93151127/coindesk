@@ -6,6 +6,7 @@ public enum RetCode {
     D0001("D0001", "查無資料"),
     D0002("D0002", "資料已存在"),
     E5000("E5000", "參數錯誤"),
+    E5001("E5001", "呼叫外部系統錯誤"),
     E9999("E9999", "未知錯誤");
 
     private final String retCode;
