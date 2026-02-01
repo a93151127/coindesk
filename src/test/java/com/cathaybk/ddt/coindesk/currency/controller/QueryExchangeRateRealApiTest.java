@@ -1,0 +1,43 @@
+package com.cathaybk.ddt.coindesk.currency.controller;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.nio.charset.StandardCharsets;
+
+import static org.hamcrest.Matchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+class QueryExchangeRateRealApiTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Test
+    void testQueryExchangeRate() throws Exception {
+
+        mockMvc.perform(get("/currency/api/queryRate")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding(StandardCharsets.UTF_8.name()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.retCode").value("S0000"))
+                .andExpect(jsonPath("$.retMsg").value("操作成功"))
+                .andExpect(jsonPath("$.data").exists())
+                .andExpect(jsonPath("$.data.items").isArray())
+                .andExpect(jsonPath("$.data.items").isArray())
+                .andExpect(jsonPath("$.data.items[0].currencyCode").isNotEmpty())
+                .andExpect(jsonPath("$.data.items[0].rate").isNotEmpty())
+
+                .andDo(r -> System.out.println(
+                        "\n[QUERY RATE API RESPONSE]\n" +
+                                r.getResponse().getContentAsString(StandardCharsets.UTF_8)
+                ));
+    }
+}
