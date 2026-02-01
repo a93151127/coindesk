@@ -21,7 +21,7 @@ class CallCoindeskRealApiTest {
     private MockMvc mockMvc;
 
     @Test
-    void queryCoinDesk_should_call_real_coindesk_api_and_print_response() throws Exception {
+    void testCallCoindesk() throws Exception {
 
         mockMvc.perform(get("/currency/api/coindesk")
                         .accept(MediaType.APPLICATION_JSON)
