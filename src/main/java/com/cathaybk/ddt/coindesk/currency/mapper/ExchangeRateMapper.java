@@ -11,6 +11,14 @@ import java.util.*;
 
 public class ExchangeRateMapper {
 
+    /**
+     * 將匯率對照表與幣別輔助資訊轉換為 API 回傳的匯率項目清單。
+     *
+     *
+     * @param rateMapping      幣別代碼與匯率的對照表
+     * @param currencyInfoMap  幣別輔助資訊
+     * @return 匯率項目清單，若無資料則回傳空集合
+     */
     public List<QueryExchangeRateRes.RateItem> toRateItems(
             Map<String, BigDecimal> rateMapping,
             Map<String, CurrencyInfo> currencyInfoMap
@@ -45,6 +53,12 @@ public class ExchangeRateMapper {
         return rateItems;
     }
 
+    /**
+     * 將匯率數值統一格式化為字串。
+     *
+     * @param rate 原始匯率數值
+     * @return 格式化後的匯率字串，若輸入為 null 則回傳 null
+     */
     String formatRate(BigDecimal rate) {
         if (rate == null) {
             return null;
@@ -52,6 +66,12 @@ public class ExchangeRateMapper {
         return rate.setScale(6, RoundingMode.HALF_UP).toPlainString();
     }
 
+    /**
+     * 從 CoinDesk API 回傳結果中擷取幣別與匯率資訊。
+     *
+     * @param src CoinDesk API 回傳的原始資料
+     * @return 幣別代碼與匯率的對照表，若無資料則回傳空 Map
+     */
     public Map<String, BigDecimal> extractCurrencyRates(CoinDeskRes src) {
         Map<String, BigDecimal> rateMapping = new HashMap<>();
         if (src == null || src.getBpi() == null) {
@@ -68,7 +88,7 @@ public class ExchangeRateMapper {
     }
 
     /**
-     * 給 mapper 用的輔助資料（DB 查回來後組成），故設為 package-private。
+     * 提供 Mapper 使用的幣別輔助資料。
      */
     public static class CurrencyInfo {
         private final String currencyNameZh;
